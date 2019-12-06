@@ -36,12 +36,12 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
                 return True
         return False
     def checkUp(self, col, row, colorPiece):
-        if self.grid[row+1][col].occupied:
+        if self.grid[row-1][col].occupied:
             if colorPiece != self.grid[row+1][col].color:
                 return True
         return False
     def checkDown(self, col, row, colorPiece):
-        if self.grid[row-1][col].occupied:
+        if self.grid[row+1][col].occupied:
             if colorPiece != self.grid[row-1][col].color:
                 return True
         return False
