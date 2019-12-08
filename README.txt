@@ -25,9 +25,9 @@ STRUCTURE
 ALGORITHM
 -KO RULE: State of the board can not be what it was previously 
 (Easy: Just compare intended move state with previous state of board)
--Capture: Use a pathfinder algorithm at a starting point, and recursively
+-(COMPLETED) Capture: Use a Dijkstra's pathfinder algorithm at a starting point, and recursively
 check if the opposite color is captured
--Placement in Captured Area: This will be a little difficult, since I originally
+-(COMPLETED) Placement in Captured Area: This will be a little difficult, since I originally
 intended to check piece placements based on liberties. However, you can still
 place pieces in captured area if it will capitalize with other pieces.
 (Strategy still in progress)
@@ -38,3 +38,71 @@ allows 0 liberties or capture potential
 that a respective empty area is granted to. We also have to check if an area is
 even captured.
 (Strategy still in progress)
+
+OTHER FEATURES
+-Website Implementation
+-Animations
+
+
+
+
+
+def checkRight(self, col, row, colorPiece):
+        if self.grid[row][col+1].occupied:
+            if colorPiece != self.grid[row][col+1].color:
+                return True
+        return False #Return true if enemy, false if ally
+    def checkLeft(self, col, row, colorPiece):
+        if self.grid[row][col-1].occupied:
+            if colorPiece != self.grid[row][col-1].color:
+                return True
+        return False
+    def checkUp(self, col, row, colorPiece):
+        if self.grid[row-1][col].occupied:
+            if colorPiece != self.grid[row+1][col].color:
+                return True
+        return False
+    def checkDown(self, col, row, colorPiece):
+        if self.grid[row+1][col].occupied:
+            if colorPiece != self.grid[row-1][col].color:
+                return True
+        return False
+    def checkOccupied(self, positionX, positionY):
+        col = round((positionX - 231)/52)
+        row = round((positionY - 31)/52)
+        return self.grid[row][col].occupied
+    def checkLiberties(self, col, row, colorPiece):
+        placable = True
+        if (0 < row < 18) and (0 < col < 18):
+           if self.checkRight(col, row, colorPiece) and self.checkLeft(col, row, colorPiece) and \
+                self.checkDown(col, row, colorPiece) and self.checkUp(col, row, colorPiece):
+                   placable = False
+        elif (row == 0) and (0 < col < 18):
+           if self.checkRight(col, row, colorPiece) and self.checkLeft(col, row, colorPiece) and \
+                self.checkDown(col, row, colorPiece):
+                   placable = False
+        elif (row == 18) and (0 < col < 18):
+           if self.checkRight(col, row, colorPiece) and self.checkLeft(col, row, colorPiece) and \
+                self.checkUp(col, row, colorPiece):
+                   placable = False
+        elif (col == 0) and (0 < row < 18):
+           if self.checkRight(col, row, colorPiece) and self.checkDown(col, row, colorPiece) and \
+               self.checkUp(col, row, colorPiece):
+                   placable = False
+        elif (col == 18) and (0 < col < 18):
+           if self.checkDown(col, row, colorPiece) and self.checkLeft(col, row, colorPiece) and \
+               self.checkUp(col, row, colorPiece):
+                   placable = False
+        elif (col == 0) and (row == 0):
+           if self.checkRight(col, row, colorPiece) and self.checkDown(col, row, colorPiece):
+                   placable = False
+        elif (col == 18) and (row == 0):
+           if self.checkLeft(col, row, colorPiece) and self.checkDown(col, row, colorPiece):
+                   placable = False
+        elif (col == 0) and (row == 18):
+           if self.checkRight(col, row, colorPiece) and self.checkUp(col, row, colorPiece):
+                   placable = False
+        elif (col == 18) and (row == 18):
+           if self.checkLeft(col, row, colorPiece) and self.checkUp(col, row, colorPiece):
+                   placable = False
+        return placable #Return true if at least one allies, false if all enemy / boundary
