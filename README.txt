@@ -23,7 +23,7 @@ STRUCTURE
 -Program mouse cursor to react to each placement on the board
 
 ALGORITHM
--KO RULE: State of the board can not be what it was previously 
+-(COMPLETED) KO RULE: State of the board can not be what it was previously 
 (Easy: Just compare intended move state with previous state of board)
 -(COMPLETED) Capture: Use a Dijkstra's pathfinder algorithm at a starting point, and recursively
 check if the opposite color is captured
@@ -38,6 +38,7 @@ allows 0 liberties or capture potential
 that a respective empty area is granted to. We also have to check if an area is
 even captured.
 (Strategy still in progress)
+-Implement a try again feature when piece tries to make an invalid play instead of wasting turn
 
 OTHER FEATURES
 -Website Implementation

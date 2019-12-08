@@ -6,6 +6,7 @@ Created on Wed Dec  4 23:22:29 2019
 """
 
 import pygame
+import copy 
 
 pygame.init()
 
@@ -125,6 +126,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
                        captureOccured = True
                        for x in usedPoints:
                            self.grid[x[0]][x[1]].occupied = False
+                           self.grid[x[0]][x[1]].color = None
         if col != 0:
             if self.checkLeft(col, row) and self.grid[row][col-1].color != colorPiece:
                safe = self.checkLiberties(col-1, row) #Check for open space
@@ -135,6 +137,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
                        captureOccured = True
                        for x in usedPoints:
                            self.grid[x[0]][x[1]].occupied = False
+                           self.grid[x[0]][x[1]].color = None
 
         if row != 0:
             if self.checkUp(col, row) and self.grid[row-1][col].color != colorPiece:
@@ -146,6 +149,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
                        captureOccured = True
                        for x in usedPoints:
                            self.grid[x[0]][x[1]].occupied = False
+                           self.grid[x[0]][x[1]].color = None
         if row != 18:
             if self.checkDown(col, row) and self.grid[row+1][col].color != colorPiece:
                safe = self.checkLiberties(col, row+1) #Check for open space
@@ -156,6 +160,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
                        captureOccured = True
                        for x in usedPoints:
                            self.grid[x[0]][x[1]].occupied = False
+                           self.grid[x[0]][x[1]].color = None
         if captureOccured:
             return True
         else:
@@ -176,12 +181,10 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
         return False
 
     def placePiece(self, positionX, positionY, colorPiece):
-        #self.printGrid(self.gridOne)
-        #self.gridOne = self.gridTwo.copy()
-        #self.printGrid(self.gridOne)
-        #self.gridTwo = self.grid.copy()
-        
-        self.printGrid(self.gridTwo)
+
+        self.gridOne = copy.deepcopy(self.gridTwo)
+        self.gridTwo = copy.deepcopy(self.grid)
+
         column = round((positionX - 231)/52)
         row = round((positionY - 31)/52)
         place = self.grid[row][column]
@@ -196,11 +199,29 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
         if not change and not self.checkLiberties(column,row) \
             and not self.checkAlly(row, column, place.color):
             place.occupied = False
-        self.printGrid(self.grid)
-        #if self.turn > 2: #Dealing with KO rule
-        #    if self.grid == self.gridOne:
-        #        self.grid = self.gridTwo
-        self.turn += 1
+            place.color = None
+        #self.printGrid(self.grid)
+        if self.turn > 2: #Dealing with KO rule
+           rowInc = 0
+           same = True
+           for x in self.gridOne:
+               colInc = 0
+               for y in x:
+                   if self.grid[rowInc][colInc].occupied == y.occupied:
+                       #if(self.grid[rowInc][colInc].occupied and y.occupied):
+                       #    print(self.grid[rowInc][colInc].color)
+                       #    print(y.color)
+                       if self.grid[rowInc][colInc].color != y.color:
+                           same = False
+                   else:
+                       same = False
+                   colInc += 1
+               rowInc += 1
+           if same:
+               self.grid = copy.deepcopy(self.gridTwo)
+           else:
+               self.turn += 1
+        else: self.turn += 1
            
     def printGrid(self, grid):
         for x in grid:
