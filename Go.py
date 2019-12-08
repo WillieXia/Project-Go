@@ -57,7 +57,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
            if self.checkRight(col, row) and self.checkDown(col, row) and \
                self.checkUp(col, row):
                    placable = False
-        elif (col == 18) and (0 < col < 18):
+        elif (col == 18) and (0 < row < 18):
            if self.checkDown(col, row) and self.checkLeft(col, row) and \
                self.checkUp(col, row):
                    placable = False
@@ -143,6 +143,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
             if self.checkUp(col, row) and self.grid[row-1][col].color != colorPiece:
                safe = self.checkLiberties(col, row-1) #Check for open space
                if(not safe):
+                   
                    usedPoints = set()
                    avoidElim = self.findAllyPath(self.grid[row-1][col], usedPoints)
                    if(not avoidElim):
@@ -179,7 +180,6 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
             if self.grid[row][col+1].color == color:
                 return True
         return False
-
     def placePiece(self, positionX, positionY, colorPiece):
 
         self.gridOne = copy.deepcopy(self.gridTwo)
@@ -221,8 +221,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
                self.grid = copy.deepcopy(self.gridTwo)
            else:
                self.turn += 1
-        else: self.turn += 1
-           
+        else: self.turn += 1        
     def printGrid(self, grid):
         for x in grid:
             row = ""
@@ -275,6 +274,7 @@ class whitePlayer:
     def __init__(self):
         self.score = 0
 
+
 class blackPlayer:
     def __init__(self):
         self.score = 0
@@ -290,7 +290,7 @@ initBoard = []
 count = 0
 
 columnY = 31
-for column in range(0,19):
+for column in range(0,19): #Setting up the board by pixel seperation
     singleRow = []
     columnX = 231
     for row in range(0,19):

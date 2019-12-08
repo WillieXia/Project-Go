@@ -38,7 +38,10 @@ allows 0 liberties or capture potential
 that a respective empty area is granted to. We also have to check if an area is
 even captured.
 (Strategy still in progress)
+
+BUGS
 -Implement a try again feature when piece tries to make an invalid play instead of wasting turn
+-(FIXED) Right side capture not working
 
 OTHER FEATURES
 -Website Implementation
