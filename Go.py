@@ -195,8 +195,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
            place.Piece = blackPiece(place.X-28,place.Y-28)
            place.color = False
         change = self.checkCapture(column, row, colorPiece)
-        if not change and not self.checkLiberties(column,row) \
-            and not self.checkAlly(row, column, place.color):
+        if not change and not self.checkLiberties(column,row):
             place.occupied = False
             place.color = None
             return False

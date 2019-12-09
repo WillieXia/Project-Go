@@ -31,9 +31,8 @@ check if the opposite color is captured
 intended to check piece placements based on liberties. However, you can still
 place pieces in captured area if it will capitalize with other pieces.
 (Strategy still in progress)
--Forbidden Points: Players can't play on a forbidden point, a point that won't
+-(COMPLETED) Forbidden Points: Players can't play on a forbidden point, a point that
 allows 0 liberties or capture potential
-(Strategy still in progress)
 -Area calculation: This will also be difficult, as we have to determine the color
 that a respective empty area is granted to. We also have to check if an area is
 even captured.
