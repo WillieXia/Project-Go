@@ -40,7 +40,7 @@ even captured.
 (Strategy still in progress)
 
 BUGS
--Implement a try again feature when piece tries to make an invalid play instead of wasting turn
+-(FIXED) Implement a try again feature when piece tries to make an invalid play instead of wasting turn
 -(FIXED) Right side capture not working
 
 OTHER FEATURES

@@ -181,10 +181,9 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
                 return True
         return False
     def placePiece(self, positionX, positionY, colorPiece):
-
+        temp = copy.deepcopy(self.gridOne)
         self.gridOne = copy.deepcopy(self.gridTwo)
         self.gridTwo = copy.deepcopy(self.grid)
-
         column = round((positionX - 231)/52)
         row = round((positionY - 31)/52)
         place = self.grid[row][column]
@@ -200,6 +199,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
             and not self.checkAlly(row, column, place.color):
             place.occupied = False
             place.color = None
+            return False
         #self.printGrid(self.grid)
         if self.turn > 2: #Dealing with KO rule
            rowInc = 0
@@ -219,9 +219,16 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
                rowInc += 1
            if same:
                self.grid = copy.deepcopy(self.gridTwo)
+               self.gridTwo = copy.deepcopy(self.gridOne)
+               self.gridOne = copy.deepcopy(temp)
+               return False
            else:
                self.turn += 1
-        else: self.turn += 1        
+               return True
+        else: 
+            self.turn += 1
+            return True
+
     def printGrid(self, grid):
         for x in grid:
             row = ""
@@ -315,10 +322,13 @@ while not gameover:
             if ((abs(coord[0]-231))%52 <= 10  or (abs(coord[0]-231))%52 > 42) and ((abs(coord[1]-31)%52 <= 10)  \
                 or (abs(coord[1]-31))%52 > 42) and coord[0] > 200 and coord[0] < 1180 and coord[1] > 29 and coord[1] < 970 \
                 and not board.checkOccupied(coord[0],coord[1]):
-                    if whiteTurn:
-                        board.placePiece(coord[0],coord[1], True)
-                        whiteTurn = False
-                    else:
-                        board.placePiece(coord[0],coord[1], False)     
-                        whiteTurn = True
+                    checkTurn = board.turn + 2
+                    if whiteTurn and checkTurn%2 == 1:
+                        check = board.placePiece(coord[0],coord[1], True)
+                        if check :
+                            whiteTurn = False
+                    elif not whiteTurn and checkTurn%2 == 0:
+                        check = board.placePiece(coord[0],coord[1], False) 
+                        if check:
+                            whiteTurn = True
             board.refreshScreen(display, background_image)
