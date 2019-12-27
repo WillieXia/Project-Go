@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Dec  4 23:22:29 2019
+Created on Wed Nov  28 23:22:29 2019
 
-@author: Guest1
+@author: Willie Xia
 """
 
 import pygame
@@ -39,6 +39,22 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
         if self.grid[row+1][col].occupied:
             return True
         return False
+    def hasAlly(self, col, row, color):
+        foundAlly = False
+        if row != 0:
+            if self.grid[row-1][col].color == color:
+                foundAlly = True
+        if row != 18:
+            if self.grid[row+1][col].color == color:
+                foundAlly = True
+        if col != 0:
+            if self.grid[row][col+1].color == color:
+                foundAlly = True
+        if col != 18:
+            if self.grid[row][col-1].color == color:
+                foundAlly = True
+        return foundAlly
+
     def checkLiberties(self, col, row):
         placable = True
         if (0 < row < 18) and (0 < col < 18):
@@ -195,7 +211,7 @@ class Board: #The overall board. Each intersection is represented by a "Placemen
            place.Piece = blackPiece(place.X-28,place.Y-28)
            place.color = False
         change = self.checkCapture(column, row, colorPiece)
-        if not change and not self.checkLiberties(column,row):
+        if not change and not self.checkLiberties(column,row) and not self.hasAlly(column, row, place.color):
             place.occupied = False
             place.color = None
             return False
@@ -292,6 +308,31 @@ background_image = pygame.image.load("go_board.png")
 display.fill([255,255,255])
 display.blit(background_image, [200, 0])
 
+def displayTurn(display, turn):
+    font = pygame.font.Font('freesansbold.ttf', 30)
+    text = font.render('Turn: '+str(turn), True, [0,0,0])
+    textRect = text.get_rect()  
+    textRect.center = (1300,20) 
+    display.blit(text, textRect)
+    font = pygame.font.Font('freesansbold.ttf', 30)
+    color = ""
+    if turn%2 == 1:
+        color += "White"
+    else:
+        color += "Black"
+    text = font.render(color + '\'s Turn', True, [0,0,0])
+    textRect = text.get_rect()  
+    textRect.center = (1300,50) 
+    display.blit(text, textRect)
+
+def displayInstruction(display, text):
+    font = pygame.font.Font('freesansbold.ttf', 30)
+    text = font.render(text, True, [0,0,0])
+    textRect = text.get_rect()  
+    textRect.center = (0,30) 
+    display.blit(text, textRect)
+
+#Initializing and creating an empty board
 initBoard = []
 count = 0
 
@@ -310,16 +351,26 @@ board = Board(initBoard)
 
 gameover = False
 whiteTurn = False #False is for black, true for white
+displayTurn(display, board.turn)
 while not gameover:
+    display.blit(pygame.transform.scale(pygame.image.load("help_button.jpg"),[50,50]),[0,0])
+    display.blit(pygame.transform.scale(pygame.image.load("end_button.jpg").convert_alpha(),[50,50]),[60,0])
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameover = True
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             coord = pygame.mouse.get_pos()
+            if(0<coord[0]<50 and 0<coord[1]<50):
+                printInstructions = True
+                while printInstructions:
+                    displayInstruction("This is how to play")
+                continue
+            if(60<coord[0]<110 and 0<coord[1]<50):
+                gameover = True
             #Check if mouse is in board and place isn't occupied
-            if ((abs(coord[0]-231))%52 <= 10  or (abs(coord[0]-231))%52 > 42) and ((abs(coord[1]-31)%52 <= 10)  \
-                or (abs(coord[1]-31))%52 > 42) and coord[0] > 200 and coord[0] < 1180 and coord[1] > 29 and coord[1] < 970 \
+            if ((abs(coord[0]-231))%52 <= 12  or (abs(coord[0]-231))%52 > 40) and ((abs(coord[1]-31)%52 <= 12)  \
+                or (abs(coord[1]-31))%52 > 40) and coord[0] > 200 and coord[0] < 1180 and coord[1] > 29 and coord[1] < 970 \
                 and not board.checkOccupied(coord[0],coord[1]):
                     checkTurn = board.turn + 2
                     if whiteTurn and checkTurn%2 == 1:
@@ -330,4 +381,7 @@ while not gameover:
                         check = board.placePiece(coord[0],coord[1], False) 
                         if check:
                             whiteTurn = True
+            display.fill([255,255,255])
             board.refreshScreen(display, background_image)
+            displayTurn(display, board.turn)
+
