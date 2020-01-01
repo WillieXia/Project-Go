@@ -23,3 +23,27 @@ def displayInstruction(display, text):
     textRect = text.get_rect()  
     textRect.center = (0,30) 
     display.blit(text, textRect)
+
+def displayPass(display):
+    font = pygame.font.Font('freesansbold.ttf', 30)
+    text = font.render("Pass", True, [0,0,0])
+    textRect = text.get_rect()  
+    textRect.center = (40,80) 
+    display.blit(text, textRect)
+
+def passConfirmation(display):
+    font = pygame.font.Font('freesansbold.ttf', 25)
+    text = font.render("Are you sure?", True, [0,0,0])
+    textRect = text.get_rect()  
+    textRect.center = (100,110) 
+    display.blit(text, textRect)
+    font = pygame.font.Font('freesansbold.ttf', 25)
+    text = font.render("Yes        No", True, [0,0,0])
+    textRect = text.get_rect()  
+    textRect.center = (100,140) 
+    display.blit(text, textRect)
+    font = pygame.font.Font('freesansbold.ttf', 15)
+    text = font.render("(Double Tap)", True, [0,0,0])
+    textRect = text.get_rect()  
+    textRect.center = (100,155) 
+    display.blit(text, textRect)

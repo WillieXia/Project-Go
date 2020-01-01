@@ -47,15 +47,30 @@ board = Board(initBoard)
 gameover = False
 whiteTurn = False #False is for black, true for white
 displayTurn(display, board.turn)
+notAnswered = False
 while not gameover:
     display.blit(pygame.transform.scale(pygame.image.load("images\help_button.jpg"),[50,50]),[0,0])
     display.blit(pygame.transform.scale(pygame.image.load("images\end_button.jpg").convert_alpha(),[50,50]),[60,0])
+    displayPass(display)
+    if notAnswered:
+        passConfirmation(display)
     pygame.display.flip()
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             gameover = True
         elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             coord = pygame.mouse.get_pos()
+            if notAnswered:
+                if(30<coord[0]<80 and 100<coord[1]<150):
+                    notAnswered = False
+                    board.turn += 1
+                    whiteTurn = not whiteTurn
+                    continue
+                elif(130<coord[0]<170 and 100<coord[1]<150):
+                    notAnswered = False
+                    continue
+                else:
+                    continue
             if(0<coord[0]<50 and 0<coord[1]<50):
                 printInstructions = True
                 while printInstructions:
@@ -64,6 +79,9 @@ while not gameover:
                 continue
             if(60<coord[0]<110 and 0<coord[1]<50):
                 gameover = True
+            if(10<coord[0]<70 and 50<coord[1]<110):
+                notAnswered = True         
+                continue
             #Check if mouse is in board and place isn't occupied
             if ((abs(coord[0]-231))%52 <= 12  or (abs(coord[0]-231))%52 > 40) and ((abs(coord[1]-31)%52 <= 12)  \
                 or (abs(coord[1]-31))%52 > 40) and coord[0] > 200 and coord[0] < 1180 and coord[1] > 29 and coord[1] < 970 \
@@ -71,7 +89,7 @@ while not gameover:
                     checkTurn = board.turn + 2
                     if whiteTurn and checkTurn%2 == 1:
                         check = board.placePiece(coord[0],coord[1], True)
-                        if check :
+                        if check:
                             whiteTurn = False
                     elif not whiteTurn and checkTurn%2 == 0:
                         check = board.placePiece(coord[0],coord[1], False) 
