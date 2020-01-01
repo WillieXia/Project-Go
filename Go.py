@@ -98,4 +98,4 @@ while not gameover:
             display.fill([255,255,255])
             board.refreshScreen(display, background_image)
             displayTurn(display, board.turn)
-
+pygame.quit()
