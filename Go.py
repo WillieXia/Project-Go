@@ -7,3 +7,5 @@ REVISED FOR OPTIMIZATION
 """
 
 import pygame
+
+pygame.init()
