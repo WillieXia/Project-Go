@@ -25,7 +25,7 @@ STRUCTURE
 ALGORITHM
 -(COMPLETED) KO RULE: State of the board can not be what it was previously 
 (Easy: Just compare intended move state with previous state of board)
--(COMPLETED) Capture: Use a Dijkstra's pathfinder algorithm at a starting point, and recursively
+-(COMPLETED) Capture: Use a breadth first pathfinder algorithm at a starting point, and recursively
 check if the opposite color is captured
 -(COMPLETED) Placement in Captured Area: This will be a little difficult, since I originally
 intended to check piece placements based on liberties. However, you can still
