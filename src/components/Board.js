@@ -1,8 +1,10 @@
 import React from 'react'
 
 
-export class Board extends React.Component {
-    constructor(prop){
-        
+class Board extends React.Component {
+    constructor(props){
+        super(props)
     }
 }
+
+export default Board;
